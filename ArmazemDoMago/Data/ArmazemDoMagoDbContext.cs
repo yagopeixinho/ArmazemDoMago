@@ -9,8 +9,8 @@ namespace ArmazemDoMago.Data
         : base(options)
         { 
         }
+
         public DbSet<UsuarioModel> Usuarios => Set<UsuarioModel>();
         public DbSet<ArmazemModel> Armazem => Set<ArmazemModel>();
-
     }
 }

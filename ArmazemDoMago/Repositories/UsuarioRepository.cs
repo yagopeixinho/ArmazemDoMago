@@ -12,12 +12,8 @@ namespace ArmazemDoMago.Repositories
 
         public UsuarioRepository(ArmazemDoMagoDbContext context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
-
-        public async Task<UsuarioModel> EncontrarPorIdAsync(int id)
-        {
-            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == id);
+            _context = context ?? 
+                throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<List<UsuarioModel>> ListarTodosAsync()
@@ -25,10 +21,16 @@ namespace ArmazemDoMago.Repositories
             return await _context.Usuarios.ToListAsync();
         }
 
+        public async Task<UsuarioModel> EncontrarPorIdAsync(int id)
+        {
+            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == id);
+        }
+
         public async Task<UsuarioModel> CriarAsync(UsuarioModel usuario)
         {
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync().ConfigureAwait(false);
+
             return usuario;
         }
 
@@ -55,6 +57,7 @@ namespace ArmazemDoMago.Repositories
 
             _context.Usuarios.Remove(usuarioEncontrado);
             await _context.SaveChangesAsync().ConfigureAwait(false);
+
             return true;
         }
     }

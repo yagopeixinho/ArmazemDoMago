@@ -1,9 +1,6 @@
-﻿using ArmazemDoMago.Migrations;
-using ArmazemDoMago.Models;
-using ArmazemDoMago.Repositories;
+﻿using ArmazemDoMago.Models;
 using ArmazemDoMago.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArmazemDoMago.Controllers
@@ -17,54 +14,115 @@ namespace ArmazemDoMago.Controllers
 
         public ArmazemController(IArmazemRepository armazemRepository)
         {
-            _armazemRepository = armazemRepository;
+            _armazemRepository = armazemRepository ??
+                throw new ArgumentNullException(nameof(armazemRepository));
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ArmazemModel>>> BuscarTodosItems()
+        public async Task<ActionResult<List<ArmazemModel>>> ListarTodosAsync()
         {
-            List<ArmazemModel> armazem = await _armazemRepository.BuscarTodosItems();
-            return Ok(armazem);
+            try
+            {
+                List<ArmazemModel> armazem = await _armazemRepository.ListarTodosAsync();
+                return Ok(armazem);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ArmazemModel>> BuscarPorId(int id)
+        public async Task<ActionResult<ArmazemModel>> EncontrarPorIdAsync(int id)
         {
-            ArmazemModel armazem = await _armazemRepository.BuscarPorId(id);
-            return Ok(armazem);
-        }
-
-        [HttpGet("verificarItens")]
-        public async Task<ActionResult<ArmazemModel>> AlertaItemsArmazem()
-        {
-            var mensagemAlerta = await _armazemRepository.AlertaUnidadeItems();
-            return Ok(mensagemAlerta);
+            try
+            {
+                ArmazemModel armazem = await _armazemRepository.EncontrarPorIdAsync(id);
+                if (armazem == null)
+                {
+                    return NotFound($"Armazém com ID {id} não encontrado.");
+                }
+                return Ok(armazem);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult<ArmazemModel>> Cadastrar([FromBody] ArmazemModel armazemModel)
+        public async Task<ActionResult<ArmazemModel>> CriarAsync([FromBody] ArmazemModel armazemModel)
         {
-            ArmazemModel armazem = await _armazemRepository.Adicionar(armazemModel);
-            return Ok(armazem);
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                ArmazemModel armazem = await _armazemRepository.CriarAsync(armazemModel);
+                return Ok(armazem);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ArmazemModel>> Atualizar([FromBody] ArmazemModel armazemModel, int id)
+        public async Task<ActionResult<ArmazemModel>> AtualizarAsync(int id, [FromBody] ArmazemModel armazemModel)
         {
-            armazemModel.Id = id;
-            ArmazemModel armazem = await _armazemRepository.Atualizar(armazemModel, id);
-            return Ok(armazem);
-        }
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
+                armazemModel.Id = id;
+                ArmazemModel armazem = await _armazemRepository.AtualizarAsync(armazemModel, id);
+                if (armazem == null)
+                {
+                    return NotFound($"Armazém com ID {id} não encontrado.");
+                }
+                return Ok(armazem);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
+        }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Excluir(int id)
+        public async Task<ActionResult> ExcluirAsync(int id)
         {
-            bool apagado = await _armazemRepository.Apagar(id);
-            return Ok(apagado);
+            try
+            {
+                bool apagado = await _armazemRepository.ExcluirAsync(id);
+                if (!apagado)
+                {
+                    return NotFound();
+                }
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
         }
 
+        [HttpGet("notificacao_baixo_estoque")]
+        public async Task<ActionResult<string>> NotificacaoBaixoEstoque()
+        {
+            try
+            {
+                var mensagemAlerta = await _armazemRepository.NotificacaoBaixoEstoque();
+                return Ok(mensagemAlerta);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
+        }
     }
 }
-
-

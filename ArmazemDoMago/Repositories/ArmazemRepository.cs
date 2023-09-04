@@ -1,94 +1,94 @@
 ﻿using ArmazemDoMago.Data;
 using ArmazemDoMago.Models;
 using ArmazemDoMago.Repositories.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArmazemDoMago.Repositories
 {
     public class ArmazemRepository : IArmazemRepository
     {
-        private readonly ArmazemDoMagoDbContext _dbContext;
+        private readonly ArmazemDoMagoDbContext _context;
 
-        public ArmazemRepository(ArmazemDoMagoDbContext armazemDoMagoDbContext)
+        public ArmazemRepository(ArmazemDoMagoDbContext context)
         {
-            _dbContext = armazemDoMagoDbContext;
+            _context = context ??
+                throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<ArmazemModel> Adicionar(ArmazemModel armazem)
+        public async Task<List<ArmazemModel>> ListarTodosAsync()
         {
-            await _dbContext.Armazem.AddAsync(armazem);
-            await _dbContext.SaveChangesAsync();
+            return await _context.Armazem
+                     .OrderByDescending(item => item.PoderMagico)
+                     .ToListAsync();
+        }
+
+        public async Task<ArmazemModel?> EncontrarPorIdAsync(int id)
+        {
+           return await _context.Armazem
+                      .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        public async Task<ArmazemModel> CriarAsync(ArmazemModel armazem)
+        {
+            _context.Armazem.Add(armazem);
+            await _context.SaveChangesAsync();
 
             return armazem;
         }
 
-        public async Task<bool> Apagar(int id)
+        public async Task<ArmazemModel> AtualizarAsync(ArmazemModel armazem, int id)
         {
-            ArmazemModel armazemPorId = await BuscarPorId(id) ?? throw new Exception($"Usuario para o ID: {id} não foi encontrado.");
-            _dbContext.Armazem.Remove(armazemPorId);
-            await _dbContext.SaveChangesAsync();
+            ArmazemModel armazemEncontrado = await EncontrarPorIdAsync(id);
 
-            return true;
+            armazemEncontrado.Nome = armazem.Nome;
+            armazemEncontrado.Descricao = armazem.Descricao;
+            armazemEncontrado.PoderMagico = armazem.PoderMagico;
+            armazemEncontrado.Quantidade = armazem.Quantidade;
+
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+
+            return armazemEncontrado;
         }
 
-        public async Task<ArmazemModel> Atualizar(ArmazemModel armazem, int id)
+        public async Task<bool> ExcluirAsync(int id)
         {
-            ArmazemModel armazemPorId = await BuscarPorId(id) ?? throw new Exception($"Usuario para o ID: {id} não foi encontrado.");
-            
-            armazemPorId.Nome = armazem.Nome;
-            armazemPorId.Descricao = armazem.Descricao;
-            armazemPorId.PoderMagico = armazem.PoderMagico;
-            armazemPorId.Quantidade = armazem.Quantidade;
+            var armazemEncontrado = await EncontrarPorIdAsync(id);
 
-            _dbContext.Armazem.Update(armazemPorId);
-            await _dbContext.SaveChangesAsync();
-
-            return armazemPorId;
-        }
-
-        public async Task<ArmazemModel> BuscarPorId(int id)
-        {
-            return await _dbContext.Armazem.FirstOrDefaultAsync(x => x.Id == id);
-        }
-
-        public async Task<List<ArmazemModel>> BuscarTodosItems()
-        {
-            return await _dbContext.Armazem.OrderByDescending(item => item.PoderMagico).ToListAsync();
-        }
-
-        public async Task<string> AlertaUnidadeItems()
-        {
-            var ItensArmazem = await BuscarTodosItems();
-
-            var itensComQuantidadeInferiorA3 = ItensArmazem.Where(item => item.Quantidade < 3).ToList();
-
-
-            if (itensComQuantidadeInferiorA3.Count == 0)
+            if (armazemEncontrado != null)
             {
-                return "Seu armazém está cheio... Nenhum item com a quantidade inferior a 3 foi encontrado!";
+                _context.Armazem.Remove(armazemEncontrado);
+                await _context.SaveChangesAsync();
+                return true;
             }
-            else if(itensComQuantidadeInferiorA3.Count == 1)
-            {
-                // Construa uma string personalizada com os itens faltando
-                string mensagem = "Foi encontrado a escazes de 1 item no seu armazém:\n";
-                foreach (var item in itensComQuantidadeInferiorA3)
-                {
-                    mensagem += $"ID: {item.Id}, Nome: {item.Nome}, Quantidade: {item.Quantidade}\n";
-                }
 
-                return mensagem;
-            } else
-            {
-                // Construa uma string personalizada com os itens faltando
-                string mensagem = "Cuidado, feiticeiro! Seu armazem está com escazes dos seguintes itens:\n";
-                foreach (var item in itensComQuantidadeInferiorA3)
-                {
-                    mensagem += $"ID: {item.Id}, Nome: {item.Nome}, Quantidade: {item.Quantidade}\n";
-                }
+            return false;
+        }
 
-                return mensagem;
+        private static string ConstruirMensagemNotificacao(List<ArmazemModel> itens)
+        {
+            if (itens.Count == 0)
+            {
+                return "Seu armazém está cheio... Nenhum item com quantidade inferior a 3 foi encontrado!";
             }
+
+            string singularPlural = itens.Count == 1 ? "do seguinte item" : "dos seguintes itens";
+            var mensagem = $"Cuidado, feiticeiro! Seu armazém está com escassez {singularPlural}:\n";
+
+            foreach (var item in itens)
+            {
+                mensagem += $"ID: {item.Id}, Nome: {item.Nome}, Quantidade: {item.Quantidade}\n";
+            }
+
+            return mensagem;
+        }
+
+        public async Task<string> NotificacaoBaixoEstoque()
+        {
+            var itensComQuantidadeInferiorA3 = (await ListarTodosAsync())
+                .Where(item => item.Quantidade < 3)
+                .ToList();
+
+            return ConstruirMensagemNotificacao(itensComQuantidadeInferiorA3);
         }
     }
 }

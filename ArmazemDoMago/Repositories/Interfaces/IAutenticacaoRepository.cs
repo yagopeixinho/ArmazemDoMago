@@ -5,6 +5,6 @@ namespace ArmazemDoMago.Repositories.Interfaces
 {
     public interface IAutenticacaoRepository
     {
-        Task<UsuarioModel> ValidarCredenciais(UsuarioDTO request);
+        Task<UsuarioModel> ValidarCredenciaisAsync(UsuarioDTO usuarioDTO);
     }
 }

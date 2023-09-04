@@ -1,14 +1,13 @@
 ﻿using ArmazemDoMago.Models;
-using ArmazemDoMago.Repositories;
 using ArmazemDoMago.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
 
 namespace ArmazemDoMago.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [DisplayName("Usuários")]
+    [Authorize]
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioRepository _usuarioRepository;

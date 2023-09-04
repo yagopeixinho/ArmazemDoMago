@@ -1,11 +1,7 @@
 ﻿using ArmazemDoMago.DTOs;
 using ArmazemDoMago.Models;
-using ArmazemDoMago.Repositories;
 using ArmazemDoMago.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -17,7 +13,6 @@ namespace ArmazemDoMago.Controllers
     [ApiController]
     public class AutenticacaoController : ControllerBase
     {
-        public static UsuarioModel usuario = new UsuarioModel();
         private readonly IAutenticacaoRepository _autenticacaoRepository;
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IConfiguration _configuration;
@@ -35,41 +30,65 @@ namespace ArmazemDoMago.Controllers
         [HttpPost("registrar")]
         public async Task<ActionResult<UsuarioModel>> Registrar(UsuarioDTO request)
         {
-            string passwordHash
-                = BCrypt.Net.BCrypt.HashPassword(request.Senha);
+            try
+            {
+                string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Senha);
 
-            usuario.Email = request.Email;
-            usuario.Senha = passwordHash;
+                var usuario = new UsuarioModel
+                {
+                    Email = request.Email,
+                    Senha = passwordHash
+                };
 
-            UsuarioModel novoUsuario = await _usuarioRepository.CriarAsync(usuario);
+                UsuarioModel novoUsuario = await _usuarioRepository.CriarAsync(usuario);
 
-            return Ok(novoUsuario);
+                return Ok(novoUsuario);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<UsuarioModel>> Login(UsuarioDTO request)
         {
-            var usuarioValidado = await _autenticacaoRepository.ValidarCredenciais(request);
-
-            if (usuario == null)
+            try
             {
-                return BadRequest("Usuário não encontrado!");            
-            }
+                var usuarioValidado = await _autenticacaoRepository
+                    .ValidarCredenciaisAsync(request);
 
-            if (!BCrypt.Net.BCrypt.Verify(request.Senha, usuarioValidado.Senha))
+                if (usuarioValidado == null)
+                {
+                    return BadRequest("Usuário não encontrado!");
+                }
+
+                if (!BCrypt.Net.BCrypt.Verify(request.Senha, usuarioValidado.Senha))
+                {
+                    return BadRequest("Senha incorreta!");
+                }
+
+                string token = CreateToken(usuarioValidado);
+
+                return Ok(token);
+            }
+            catch (Exception ex)
             {
-              return BadRequest("Wrong password!");
+                // Registre a exceção ou retorne uma resposta HTTP apropriada
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
             }
-
-            string token = CreateToken(usuario);
-          
-            return Ok(token);
         }
 
         private string CreateToken(UsuarioModel usuario)
         {
-            List<Claim> claims = new List<Claim> {
-                new Claim(ClaimTypes.Name, "peixinhoyago@gmail.com"),
+            if (usuario.Email == null)
+            {
+                throw new ArgumentNullException(nameof(usuario));
+            }
+
+            List<Claim> claims = new()
+            {
+                new Claim(ClaimTypes.Name, usuario.Email),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(

@@ -8,18 +8,21 @@ namespace ArmazemDoMago.Repositories
 {
     public class AutenticacaoRepository : IAutenticacaoRepository
     {
-        private readonly ArmazemDoMagoDbContext _dbContext;
+        private readonly ArmazemDoMagoDbContext _context;
 
-        public AutenticacaoRepository(ArmazemDoMagoDbContext armazemDoMagoDbContext)
+        public AutenticacaoRepository(ArmazemDoMagoDbContext context)
         {
-            _dbContext = armazemDoMagoDbContext;
+            _context = context ??
+                throw new ArgumentNullException(nameof(context));
         }
-        public async Task<UsuarioModel> ValidarCredenciais(UsuarioDTO request)
-        {
-            var usuario = await _dbContext.Usuarios
-                .FirstOrDefaultAsync(usuario => usuario.Email == request.Email);
 
-            return usuario == null ? throw new Exception("Email ou senha inválido(s)") : usuario;
+        public async Task<UsuarioModel> ValidarCredenciaisAsync(UsuarioDTO usuarioDTO)
+        {
+            var usuario = await _context.Usuarios
+                 .FirstOrDefaultAsync(u => u.Email == usuarioDTO.Email) 
+                 ?? throw new Exception("Email ou senha inválido(s)");
+            
+            return usuario;
         }
     }
 }
