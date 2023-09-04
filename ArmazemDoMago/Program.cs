@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Text;
+using System.Xml.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,14 @@ builder.Services.AddSwaggerGen(options =>
     });
 
     options.OperationFilter<SecurityRequirementsOperationFilter>();
+
+    options.SwaggerDoc("v1", new OpenApiInfo 
+    { Title = "Armazem do Mago!", 
+      Version = "v1", 
+      Description= "Um mago precisa gerenciar seus itens mágicos em um armazém. " +
+      "Ele quer uma API RESTful para adicionar, remover, listar e atualizar informações sobre seus itens!",
+    });
+
 });
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => {

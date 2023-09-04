@@ -1,61 +1,61 @@
 ﻿using ArmazemDoMago.Data;
 using ArmazemDoMago.Models;
 using ArmazemDoMago.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArmazemDoMago.Repositories
 {
     public class UsuarioRepository : IUsuarioRepository
     {
-        private readonly ArmazemDoMagoDbContext _dbContext;
+        private readonly ArmazemDoMagoDbContext _context;
 
-        public UsuarioRepository(ArmazemDoMagoDbContext armazemDoMagoDbContext)
-        { 
-            _dbContext = armazemDoMagoDbContext;
+        public UsuarioRepository(ArmazemDoMagoDbContext context)
+        {
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<UsuarioModel> Adicionar(UsuarioModel usuario)
+        public async Task<UsuarioModel> EncontrarPorIdAsync(int id)
         {
-            await _dbContext.Usuarios.AddAsync(usuario);
-            await _dbContext.SaveChangesAsync();
+            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == id);
+        }
 
+        public async Task<List<UsuarioModel>> ListarTodosAsync()
+        {
+            return await _context.Usuarios.ToListAsync();
+        }
+
+        public async Task<UsuarioModel> CriarAsync(UsuarioModel usuario)
+        {
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             return usuario;
         }
 
-        public async Task<bool> Apagar(int id)
+        public async Task<UsuarioModel> AtualizarAsync(UsuarioModel usuario, int id)
         {
-            UsuarioModel usuarioPorId = await BuscarPorId(id) ?? throw new Exception($"Usuario para o ID: {id} não foi encontrado.");
-            _dbContext.Usuarios.Remove(usuarioPorId);
-            await _dbContext.SaveChangesAsync();
+            var usuarioEncontrado = await EncontrarPorIdAsync(id);
 
-            return true;
+
+            usuarioEncontrado.Email = usuario.Email;
+            usuarioEncontrado.Senha = usuario.Senha;
+
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+
+            return usuarioEncontrado;
         }
 
-        public async Task<UsuarioModel> Atualizar(UsuarioModel usuario, int id)
+        public async Task<bool> ExcluirAsync(int id)
         {
-            UsuarioModel usuarioPorId = await BuscarPorId(id);
-
-            if (usuarioPorId == null)
+            var usuarioEncontrado = await EncontrarPorIdAsync(id);
+            if (usuarioEncontrado == null)
             {
-                throw new Exception($"Usuario para o ID: {id} não foi encontrado.");
+                return false; // Indica que o usuário não foi encontrado
             }
 
-            usuarioPorId.Email = usuario.Email;
-
-            _dbContext.Usuarios.Update(usuarioPorId);
-            await _dbContext.SaveChangesAsync();
-
-            return usuarioPorId;
-        }
-
-        public async Task<UsuarioModel> BuscarPorId(int id)
-        {
-            return await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Id == id);
-        }
-
-        public async Task<List<UsuarioModel>> BuscarTodosUsuarios()
-        {
-            return await _dbContext.Usuarios.ToListAsync();
+            _context.Usuarios.Remove(usuarioEncontrado);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+            return true;
         }
     }
 }

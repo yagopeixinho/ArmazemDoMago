@@ -7,6 +7,5 @@
         public string? Descricao { get; set; }
         public int Quantidade { get; set; }
         public int PoderMagico { get; set; }
-
     }
 }

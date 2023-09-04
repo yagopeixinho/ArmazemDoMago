@@ -39,9 +39,9 @@ namespace ArmazemDoMago.Controllers
                 = BCrypt.Net.BCrypt.HashPassword(request.Senha);
 
             usuario.Email = request.Email;
-            usuario.SenhaHash = passwordHash;
+            usuario.Senha = passwordHash;
 
-            UsuarioModel novoUsuario = await _usuarioRepository.Adicionar(usuario);
+            UsuarioModel novoUsuario = await _usuarioRepository.CriarAsync(usuario);
 
             return Ok(novoUsuario);
         }
@@ -56,7 +56,7 @@ namespace ArmazemDoMago.Controllers
                 return BadRequest("Usuário não encontrado!");            
             }
 
-            if (!BCrypt.Net.BCrypt.Verify(request.Senha, usuarioValidado.SenhaHash))
+            if (!BCrypt.Net.BCrypt.Verify(request.Senha, usuarioValidado.Senha))
             {
               return BadRequest("Wrong password!");
             }
