@@ -8,6 +8,7 @@ namespace ArmazemDoMago.Repositories
     public class UsuarioRepository : IUsuarioRepository
     {
         private readonly ArmazemDoMagoDbContext _dbContext;
+
         public UsuarioRepository(ArmazemDoMagoDbContext armazemDoMagoDbContext)
         { 
             _dbContext = armazemDoMagoDbContext;
@@ -23,13 +24,7 @@ namespace ArmazemDoMago.Repositories
 
         public async Task<bool> Apagar(int id)
         {
-            UsuarioModel usuarioPorId = await BuscarPorId(id);
-
-            if (usuarioPorId == null)
-            {
-                throw new Exception($"Usuario para o ID: {id} não foi encontrado.");
-            }
-
+            UsuarioModel usuarioPorId = await BuscarPorId(id) ?? throw new Exception($"Usuario para o ID: {id} não foi encontrado.");
             _dbContext.Usuarios.Remove(usuarioPorId);
             await _dbContext.SaveChangesAsync();
 
@@ -45,7 +40,6 @@ namespace ArmazemDoMago.Repositories
                 throw new Exception($"Usuario para o ID: {id} não foi encontrado.");
             }
 
-            usuarioPorId.Nome = usuario.Nome;
             usuarioPorId.Email = usuario.Email;
 
             _dbContext.Usuarios.Update(usuarioPorId);

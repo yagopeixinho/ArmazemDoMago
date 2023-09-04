@@ -1,6 +1,5 @@
 ﻿using ArmazemDoMago.Models;
 using ArmazemDoMago.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArmazemDoMago.Controllers

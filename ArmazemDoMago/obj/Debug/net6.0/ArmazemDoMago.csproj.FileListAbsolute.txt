@@ -78,3 +78,15 @@ C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\obj\Debug\net6.0\refint\
 C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\obj\Debug\net6.0\ArmazemDoMago.pdb
 C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\obj\Debug\net6.0\ArmazemDoMago.genruntimeconfig.cache
 C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\obj\Debug\net6.0\ref\ArmazemDoMago.dll
+C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\bin\Debug\net6.0\BCrypt.Net-Next.dll
+C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\bin\Debug\net6.0\Scrutor.dll
+C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.dll
+C:\Users\peixi\source\repos\ArmazemDoMago\ArmazemDoMago\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
