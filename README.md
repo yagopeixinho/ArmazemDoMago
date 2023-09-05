@@ -13,29 +13,35 @@
   <a href="#visão-geral">Visão Geral</a> •
   <a href="#funcionalidades">Funcionalidades</a> •
   <a href="#instalação">Instalação</a> •   
-  <a href="#recursos">Recursos</a> 
+  <a href="#recursos">Recursos</a> • 
+  <a href="#contato">Contato</a> •   
+  <a href="#licença">Licença</a>   
+
 </p>
 
 ## Visão Geral
-O ArmazemDoMago é a solução perfeita para magos que desejam manter um inventário organizado de seus itens mágicos. 
+O ArmazemDoMago é um projeto encantador que combina o mundo da magia com a tecnologia moderna para criar uma experiência única para magos e entusiastas do oculto. Este projeto tem como objetivo principal fornecer uma plataforma onde os usuários possam gerenciar seus itens mágicos de forma eficaz e organizada, tudo com a ajuda de uma API robusta e amigável.
 
 ## Funcionalidades
-### Principais funcionalidades:
-- Adicionar novos itens ao seu armazém mágico.
-- Remover itens que não são mais necessários.
-- Listar todos os seus itens para uma visão geral rápida.
-- Atualizar informações sobre itens existentes.
-- Notificação de baixo estoque
-- Listagem organizada
 
-### Tecnologias utilizadas:
+1. **Catalogação Mágica:** O coração do ArmazemDoMago é a capacidade de catalogar e listar todos os tipos de itens mágicos, desde amuletos e ingredientes misteriosos até grimórios e artefatos encantados.
+
+2. **Gerenciamento Simplificado:** Os usuários podem listar, adicionar, atualizar e remover itens mágicos com facilidade, permitindo-lhes manter um controle preciso de seu inventário.
+
+3. **Ordenação Mágica:** Os itens são apresentados de forma organizada, permitindo o usuário classificar a listagem pelos itens mais poderosos primeiro.
+
+4. **Notificações Místicas:** O sistema de notificação alerta os usuários quando seus estoques mágicos estão ficando baixos, garantindo que nunca fiquem despreparados.
+
+5. **Segurança Mágica:** A autenticação de usuário baseada em JWT garante que apenas os magos autorizados tenham acesso aos segredos de seu armazém.
+
+
+## 🛠 Tecnologias
 - .Net Core 6
 - Entity Framework Core 
 - SQLite
 - JWT para Autenticação
 
 ## Instalação
-
 Antes de rodar o projeto, é necessário ter instalado em sua máquina:
 
 - [Git](https://git-scm.com/)
@@ -68,7 +74,7 @@ Informe os dados de registro do usuário no corpo da requisição
 
 Geração de Token de Acesso
 Uma vez registrado, você pode gerar um Token de Acesso para autenticar suas futuras solicitações às rotas seguras. Acesse a rota de login:
-##### /api/Autenticacao/login
+#### /api/Autenticacao/login
 
 Novamente, forneça as informações de login no corpo da requisição, utilizando o mesmo endereço de e-mail e senha definidos durante o registro:
 ```json
@@ -116,12 +122,37 @@ Obtém informações detalhadas sobre um item mágico específico no armazém.
 
 ### POST /api/Armazem
 Adiciona um novo item mágico ao armazém.
+##### Exemplo de requisição
+```json
+{
+  "id": 0,
+  "nome": "Caneca mágica!",
+  "descricao": "Sabe o que isso significa?! Café mágico para todos os magos programadores!",
+  "quantidade": 4,
+  "poderMagico": 4
+}
+```
 
 ### PUT /api/Armazem/{id}
 Atualiza informações sobre um item mágico existente no armazém.
+##### Exemplo de requisição
+```json
+{
+  "nome": "Anéis mágicos",
+  "descricao": "Quem sabe eu finalmente encontro o amor da minha vida...",
+  "quantidade": 100,
+  "poderMagico": 6
+}
+```
 
 ### DELETE /api/Armazem/{id}
 Remove um item mágico do armazém.
 
+## Contato
+- 📬 Me envie um e-mail: peixinhoyago@gmail.com
+- Se você tem alguma dúvida ou quer entrar em contato comigo por qualquer outro motivo, você pode encontrar minhas redes sociais e mais informação sobre mim [clicando aqui](https://github.com/yagopeixinho/yagopeixinho/blob/master/README.md)
+
+## Licença
+Esse projeto não possui nenhuma licença.
 
 
