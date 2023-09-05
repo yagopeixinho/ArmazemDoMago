@@ -46,12 +46,12 @@ Antes de rodar o projeto, é necessário ter instalado em sua máquina:
 
 - [Git](https://git-scm.com/)
 - DB Browser (SQLite) - Opcional
-- Um IDE de sua preferência (Recomendo o Visual Studio 2022)
+- Um IDE de sua preferência (Windows: Recomendo o Visual Studio 2022; Linux: Recomendo o JetBrains Rider)
 
 ### 📦 Clonando repositório
 
 ```bash
-$ git clone git@github.com:yagopeixinho/ArmazemDoMago.gitt
+$ git clone git@github.com:yagopeixinho/ArmazemDoMago.git
 ```
 
 ### Banco de Dados
