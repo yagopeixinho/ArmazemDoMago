@@ -129,7 +129,6 @@ Adiciona um novo item mágico ao armazém.
 ##### Exemplo de requisição
 ```json
 {
-  "id": 0,
   "nome": "Caneca mágica!",
   "descricao": "Sabe o que isso significa?! Café mágico para todos os magos programadores!",
   "quantidade": 4,
