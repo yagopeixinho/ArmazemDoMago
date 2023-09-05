@@ -86,8 +86,10 @@ Novamente, forneça as informações de login no corpo da requisição, utilizan
 
 <details>
   <summary>Continuar autenticação com o Swagger</summary>
-     
+
 ### Swagger
+#### [Fiz um vídeo tutorial caso preferível](https://youtu.be/c9_hKGWocaY?list=TLPQMDUwOTIwMjMmNx0y8RgL7w)
+
 Após uma autenticação bem-sucedida, você receberá um token no formato JWT que deve ser incluído no cabeçalho de suas solicitações às rotas protegidas. Para fazer isso no Swagger, clique em "Authorize" e insira o token no seguinte formato:
 ```
 Bearer {seu-token-aqui}
@@ -102,9 +104,11 @@ Agora você pode acessar todas as rotas seguras da API com segurança!
 </details>
 
 <details>
-  <summary>Continuar autenticação com o Postman</summary>
-     
+ <summary>Continuar autenticação com o Postman</summary>
+
 ### Postman
+#### [Fiz um vídeo tutorial caso preferível](https://youtu.be/V5SyWx0YooI)
+
 Após uma autenticação bem-sucedida, você receberá um token no formato JWT que deve ser incluído no cabeçalho de suas solicitações às rotas protegidas. Para fazer isso no Postman, clique em "Authorization" 
 no método selecionado e informe o Type: __Bearer Token__.
 
