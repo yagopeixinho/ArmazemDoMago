@@ -1,28 +1,26 @@
 <div align="center">
-     <img src="./src/assets/logos/VeiacoDarkLogo.png" width="450px">
+     <img src="./ArmazemDoMagoLogo.png" width="450px">
 </div>
 
-<h4 align="center">Cansado de bagunça no seu armazém mágico? Deixe a desordem desaparecer com ArmazemDoMago! 🧙‍♂️✨ </h4>
+<h4 align="center">Cansado de bagunça no seu armazém mágico? Deixe a desordem desaparecer com ArmazemDoMago! ✨ </h4>
 
 <p align="center">
-    <img src="https://img.shields.io/github/last-commit/yagopeixinho/ArmazemDoMago?color=7D48B1">
+    <img src="https://img.shields.io/github/last-commit/yagopeixinho/ArmazemDoMago?color=84A3E3">
     <img src="https://img.shields.io/github/languages/count/yagopeixinho/veiacoPlataforma?color=FFD700">
 </p>
 
 <p align="center">
-  <a href="#sobre">Sobre</a> •
+  <a href="#visão-geral">Visão Geral</a> •
   <a href="#funcionalidades">Funcionalidades</a> •
-  <a href="#notas-importantes">Notas importantes</a> •
-  <a href="#galeria">Galeria</a> •
-  <a href="#instalação">Instalação</a> •
-  <a href="#contribuindo">Contribuindo</a> •
-  <a href="#contato">Contato</a> •
-  <a href="#licensa">Licensa</a>
+  <a href="#instalação">Instalação</a> •   
+  <a href="#recursos">Recursos</a> 
 </p>
 
 ## Visão Geral
-O ArmazemDoMago é a solução perfeita para magos que desejam manter um inventário organizado de seus itens mágicos. Com esta API, você pode facilmente:
+O ArmazemDoMago é a solução perfeita para magos que desejam manter um inventário organizado de seus itens mágicos. 
 
+## Funcionalidades
+### Principais funcionalidades:
 - Adicionar novos itens ao seu armazém mágico.
 - Remover itens que não são mais necessários.
 - Listar todos os seus itens para uma visão geral rápida.
@@ -30,12 +28,13 @@ O ArmazemDoMago é a solução perfeita para magos que desejam manter um invent�
 - Notificação de baixo estoque
 - Listagem organizada
 
-A tecnologias utilizadas
+### Tecnologias utilizadas:
 - .Net Core 6
 - Entity Framework Core 
 - SQLite
+- JWT para Autenticação
 
-## Instalação &nbsp;
+## Instalação
 
 Antes de rodar o projeto, é necessário ter instalado em sua máquina:
 
@@ -43,7 +42,7 @@ Antes de rodar o projeto, é necessário ter instalado em sua máquina:
 - DB Browser (SQLite) - Opcional
 - Um IDE de sua preferência (Recomendo o Visual Studio 2022)
 
-### Clonando repositório
+### 📦 Clonando repositório
 
 ```bash
 $ git clone git@github.com:yagopeixinho/ArmazemDoMago.gitt
@@ -107,11 +106,7 @@ Na variável _Token_, basta informar o Token que foi gerado e agora você pode a
 
 </details>
 
-
-
-
 ## Recursos
-
 
 ### GET /api/Armazem
 Obtém a lista de todos os itens mágicos no armazém, ordenados do item mais poderoso para o mais fraco.
