@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
-        Description = "Standart Authorizantion header using Bearer scheme",
+        Description = "Use o token no padrão Bearer {seu-token-aqui}. É necessário o Bearer precedente ao Token. Caso tenha dúvida acesse a documentação.",
         In = ParameterLocation.Header,
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
